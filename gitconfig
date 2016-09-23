@@ -1,0 +1,8 @@
+[user]
+	email = sitbackandwait@gmail.com
+	name = Noemi Vanyi
+[core]
+	excludesfile = /home/noemi/.gitignore_global
+	editor = vim
+[push]
+	default = simple

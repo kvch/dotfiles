@@ -1,3 +1,22 @@
-- clean: []
-- link: {}
-- shell: []
+- clean: ['~']
+
+- link:
+    ~/.tmux.conf: tmux.conf
+    ~/.vimrc: vimrc
+    ~/.vim: vim
+    ~/.zshrc: zshrc
+    ~/.oh-my-zsh: oh-my-zsh
+    ~/.pentadactylrc: pentadactylrc
+    ~/.config/i3: i3/
+    ~/.config/i3status: i3status/
+    ~/.Xdefaults: Xdefaults
+    ~/.xinitrc: xinitrc
+    ~/.conkyrc: conkyrc
+    ~/.gitconfig: gitconfig
+    ~/.gitignore_global: gitignore_global
+    ~/.rtorrent.rc: rtorrent.rc
+    ~/.xmodmap: xmodmap
+
+- shell:
+    - [mkdir -p ~/.config ~/.i3, Setting up directories]
+    - [git submodule update --init --recursive, Installing/updating submodules]

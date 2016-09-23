@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/noemi/p/searx/searx/static/themes/oscar/less'
+let g:netrw_dirhist_2='/home/noemi/p/searx/searx/static/themes/oscar/less/pointhi'
+let g:netrw_dirhist_3='/home/noemi/p/searx'
+let g:netrw_dirhist_4='/home/noemi/p/searx/searx/static/themes/oscar/less/pointhi'
+let g:netrw_dirhist_5='/home/noemi/p/searx/searx/static/themes/oscar/less/logicodev'

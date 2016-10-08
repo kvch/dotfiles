@@ -22,6 +22,6 @@ upload_rate = 0
 use_udp_trackers = yes
 dht = auto
 
-session = /home/noemi/.rtorrent.session
+session = /home/n/.rtorrent.session
 
 port_range = 60125-64125

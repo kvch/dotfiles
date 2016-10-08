@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/noemi/.oh-my-zsh
+export ZSH=/home/n/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -53,8 +53,8 @@ plugins=(git pip github golang virtualenv)
 
 # User configuration
 
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/home/noemi/p/scripts:/home/noemi/go/bin:$PATH"
-export GOPATH="/home/noemi/go"
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/home/n/p/s:/home/n/go/bin:$PATH"
+export GOPATH="/home/n/go"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -84,3 +84,4 @@ export EDITOR='vim'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias gg="git grep"

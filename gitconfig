@@ -2,7 +2,7 @@
 	email = sitbackandwait@gmail.com
 	name = Noémi Ványi
 [core]
-	excludesfile = /home/noemi/.gitignore_global
+	excludesfile = /home/n/.gitignore_global
 	editor = vim
 [push]
 	default = simple

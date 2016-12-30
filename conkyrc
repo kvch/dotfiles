@@ -21,7 +21,7 @@ background no
 use_xft yes
 
 # Xft font when Xft is enabled
-xftfont Bitstream Vera Sans Mono:size=8
+xftfont Bitstream Vera Sans Mono:size=7
 
 # Text alpha when using Xft
 xftalpha 0.6
@@ -168,4 +168,4 @@ use_spacer none
 TEXT
 ${color #FF3366}[C:${color #FF0066}${cpu cpu0}% ${color #33FF66}${cpugraph cpu0 8,40} ${freq 0}MHz][${acpitemp}C]${color #FF3366}[M:$mem S:$swap]${color #33FF66}[DISK I/O ${diskiograph 8,40} ${diskio}${color #FF3366}/ ${fs_free_perc /}% | /home ${fs_free_perc /home}% | /var ${fs_free_perc /var}% | /usr ${fs_free_perc /usr}%] \
 ${if_up eth0}[${color #FF3366}eth0:${color #33FF66}D ${downspeed eth0} k/s ${color #FF3366}${downspeedgraph eth0 8,40} ${color #FF3366}U:${color #FF3366} ${upspeed eth0} k/ ${color #FF3366}${upspeedgraph eth0 8,40 } ] ${endif}\
-${if_up wlan0}[wlan0: ${color #33FF66}D:${color 8844ee} ${downspeed wlan0} k/s ${downspeedgraph wlan0 8,40} ${color #FF3366}U:${color #FF3366} ${upspeed wlan0} k/s ${upspeedgraph wlan0 8,40} | essid: ${wireless_essid wlan0} ${wireless_bitrate wlan0} ${endif}\
+${if_up wlp4s0}[wlp4s0: ${color #33FF66}D:${color 8844ee} ${downspeed wlp4s0} k/s ${downspeedgraph wlp4s0 8,40} ${color #FF3366}U:${color #FF3366} ${upspeed wlp4s0} k/s ${upspeedgraph wlp4s0 8,40} | essid: ${wireless_essid wlp4s0} ${wireless_bitrate wlp4s0} ${endif}\

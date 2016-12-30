@@ -29,11 +29,16 @@ let g:task_readonly = 0
 " Markdown
 let g:vim_markdown_folding_disabled = 1
 
+" vim-go
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>gd <Plug>(go-doc)
+
 set t_Co=256
 
 syntax on
 filetype plugin indent on
 
+let mapleader=","
 colorscheme molokai
 set wildmenu
 set lazyredraw
@@ -74,6 +79,7 @@ set laststatus=2
 " Hotkeys
 inoremap ;; <esc>
 
+nnoremap <F2> :set rnu! \| :set nu!<CR>
 nmap <F4> :nohl<CR>
 nmap <F5> :source ~/.vimrc<CR>
 nmap <F6> :SyntasticReset<CR>

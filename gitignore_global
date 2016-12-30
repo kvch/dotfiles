@@ -1,10 +1,12 @@
 *.aux
+*.cache/
 *.log
 *.project.vim
 *.pyc
 *.swo
 *.swp
 *.toc
+*.tox/
 *egg-info/
 *minted*/
 *synctex.gz
@@ -20,3 +22,4 @@ install/
 project.log
 todo
 venv/
+venv3/

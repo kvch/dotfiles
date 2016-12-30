@@ -16,6 +16,7 @@
     ~/.gitignore_global: gitignore_global
     ~/.rtorrent.rc: rtorrent.rc
     ~/.xmodmap: xmodmap
+    ~/.zsh_funcs: zsh_funcs
 
 - shell:
     - [mkdir -p ~/.config ~/.i3, Setting up directories]

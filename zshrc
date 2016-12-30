@@ -55,9 +55,12 @@ plugins=(git pip github golang virtualenv)
 
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/home/n/p/s:/home/n/go/bin:$PATH"
 export GOPATH="/home/n/go"
+export GOROOT="/home/n/go"
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
+source /home/n/.zsh_funcs
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -85,3 +88,4 @@ export EDITOR='vim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias gg="git grep"
+

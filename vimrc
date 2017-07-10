@@ -90,6 +90,10 @@ nmap <F10> :setlocal spell spelllang=en_us<CR>
 
 nmap ip oimport ipdb; ipdb.set_trace()<ESC>
 
+nmap Gt :GoTest<CR>
+nmap Gli :GoLint<CR>
+nmap Gbu :GoBuild<CR>
+
 "nmap ;im o\begin{figure}[h]<CR>\begin{minted}[breaklines, breakbytoken, fontsize=\footnotesize, bgcolor=codebg]{c}<CR>%%%<CR>\end{minted}<CR>\end{figure}<ESC>
 "imap <buffer> mn <C-O>/%%%<CR><C-O>c3l
 "nmap <buffer> mn /%%%<CR>c3l

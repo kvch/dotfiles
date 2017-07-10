@@ -17,6 +17,7 @@
     ~/.rtorrent.rc: rtorrent.rc
     ~/.xmodmap: xmodmap
     ~/.zsh_funcs: zsh_funcs
+    ~/.config/pycodestyle: pycodestyle
 
 - shell:
     - [mkdir -p ~/.config ~/.i3, Setting up directories]

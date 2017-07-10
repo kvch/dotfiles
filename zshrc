@@ -53,9 +53,9 @@ plugins=(git pip github golang virtualenv)
 
 # User configuration
 
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/home/n/p/s:/home/n/go/bin:$PATH"
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/home/n/p/s:/home/n/go/bin:/home/n/p/scripts:$PATH"
 export GOPATH="/home/n/go"
-export GOROOT="/home/n/go"
+export GOROOT="/usr/lib/go"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 

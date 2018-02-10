@@ -32,6 +32,8 @@ let g:vim_markdown_folding_disabled = 1
 " vim-go
 au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>gd <Plug>(go-doc)
+let g:go_fmt_command = "goimports"
+let g:go_fmt_options = "-local=github.com/elastic"
 
 set t_Co=256
 
@@ -88,11 +90,12 @@ nmap <F8> :TagbarToggle<CR>
 nmap <F9> :%s/\s\+$//<CR>
 nmap <F10> :setlocal spell spelllang=en_us<CR>
 
-nmap ip oimport ipdb; ipdb.set_trace()<ESC>
+"nmap ip oimport ipdb; ipdb.set_trace()<ESC>
 
 nmap Gt :GoTest<CR>
 nmap Gli :GoLint<CR>
 nmap Gbu :GoBuild<CR>
+nmap Gd :GoDef<CR>
 
 "nmap ;im o\begin{figure}[h]<CR>\begin{minted}[breaklines, breakbytoken, fontsize=\footnotesize, bgcolor=codebg]{c}<CR>%%%<CR>\end{minted}<CR>\end{figure}<ESC>
 "imap <buffer> mn <C-O>/%%%<CR><C-O>c3l

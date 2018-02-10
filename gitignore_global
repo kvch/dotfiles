@@ -1,6 +1,5 @@
 *.aux
 *.cache/
-*.log
 *.project.vim
 *.pyc
 *.swo
@@ -11,6 +10,7 @@
 *minted*/
 *synctex.gz
 .buildinfo
+.coarc
 .coverage
 .doctrees/
 .todo
@@ -23,3 +23,8 @@ project.log
 todo
 venv/
 venv3/
+venv3.6/
+env/
+messages.pot
+npm-debug.log
+geckodriver.log

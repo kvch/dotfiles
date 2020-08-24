@@ -53,9 +53,10 @@ plugins=(git pip github golang virtualenv)
 
 # User configuration
 
-export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/home/n/p/s:/home/n/go/bin:/home/n/p/scripts:$PATH"
 export GOPATH="/home/n/go"
-export GOROOT="/usr/lib/go"
+export GOROOT="/usr/local/go"
+export PATH="$GOPATH/bin:$GOROOT/bin:/usr/bin:/bin:/usr/sbin:/sbin:/home/n/p/s:/home/n/go/bin:/home/n/p/scripts:$PATH"
+export PATH=$PATH:/home/n/programs/mongodb-linux-x86_64-3.0.1/bin
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -88,6 +89,7 @@ export EDITOR='vim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias gg="git grep"
+alias lb="zip -9 -r"
 
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"

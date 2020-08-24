@@ -1,0 +1,26 @@
+
+;; ----- smex-history -----
+(
+ org-agenda-month-view
+ org-agenda-list
+ org-agenda
+ load-file
+ counsel-git-grep
+ eshell
+ shell
+)
+
+;; ----- smex-data -----
+(
+ (ibuffer . 1)
+ (butterfly . 1)
+ (shell . 1)
+ (eshell . 1)
+ (counsel-git-grep . 2)
+ (vc-git-grep . 1)
+ (load-file . 1)
+ (org-agenda-todo . 1)
+ (org-agenda . 3)
+ (org-agenda-month-view . 3)
+ (org-agenda-list . 1)
+)

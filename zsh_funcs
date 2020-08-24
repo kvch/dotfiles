@@ -1,3 +1,8 @@
 function list_lost() {
     git reflog |  awk '{ print $1 }' | xargs gitk
 }
+
+function add_remote() {
+    git remote add $2 http://github.com/$2/$1.git
+    git fetch $2
+}

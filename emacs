@@ -5,6 +5,7 @@
 (require 'cl)
 (require 'package)
 (require 'deft)
+(require 'org-bullets)
 
 ;;; Code:
 
@@ -69,6 +70,27 @@
 (load-theme 'molokai t)
 (set-face-foreground 'font-lock-comment-face "dark grey")
 (set-face-foreground 'font-lock-comment-delimiter-face "dark grey")
+(let* ((variable-tuple
+        (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+              ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+              ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+              ((x-list-fonts "Verdana")         '(:font "Verdana"))
+              ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+              (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+       (base-font-color     (face-foreground 'default nil 'default))
+       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+  (custom-theme-set-faces
+   'user
+   `(org-level-8 ((t (,@headline ,@variable-tuple))))
+   `(org-level-7 ((t (,@headline ,@variable-tuple))))
+   `(org-level-6 ((t (,@headline ,@variable-tuple))))
+   `(org-level-5 ((t (,@headline ,@variable-tuple))))
+   `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+   `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+   `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+   `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+   `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
 
 (setq-default show-trailing-whitespace t)
 (set-face-attribute 'default nil :height 80)
@@ -87,6 +109,7 @@
 
 (smooth-scrolling-mode 1)
 (setq scroll-preserve-screen-position t)
+
 
 ;; CUSTOMISATIONS
 ;; use 4 spaces instead of tabs
@@ -193,6 +216,9 @@
 (setq org-agenda-include-diary t)
 (setq org-agenda-start-on-weekday 1)
 (setq org-todo-keywords '((sequence "TODO(t)" "WAIT(w@/!)" "IN PROGRESS(i)" "|" "DONE(d!)" "CANCELED(c@)")))
+(setq org-tag-alist '(("work" . ?w) ("investigate" . ?i) ("review" . ?r) ("meeting" . ?m) ("backport" . ?b)))
+
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 ;; RECENTF
 (recentf-mode 1)
@@ -248,10 +274,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("4cf9ed30ea575fb0ca3cff6ef34b1b87192965245776afa9e9e20c17d115f3fb" "b89ae2d35d2e18e4286c8be8aaecb41022c1a306070f64a66fd114310ade88aa" default)))
  '(org-agenda-files (quote ("~/o/a/daily.org" "~/o/a/beats.org")))
  '(package-selected-packages
    (quote
-    (org-download org-roam mmm-mode jedi yasnippet yaml-mode sr-speedbar spaceline smooth-scrolling smex molokai-theme markdown-mode linum-relative less-css-mode go-mode ggtags evil-surround evil-org evil-multiedit evil-magit evil-leader counsel-projectile company-php company-jedi))))
+    (mmm-mode jedi yasnippet yaml-mode sr-speedbar spaceline smooth-scrolling smex molokai-theme markdown-mode linum-relative less-css-mode go-mode ggtags evil-surround evil-org evil-multiedit evil-magit evil-leader counsel-projectile company-php company-jedi))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

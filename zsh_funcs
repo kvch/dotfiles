@@ -6,3 +6,10 @@ function add_remote() {
     git remote add $2 http://github.com/$2/$1.git
     git fetch $2
 }
+
+function update_master() {
+    git stash
+    git checkout master
+    git fetch upstream
+    git reset --hard upstream/master
+}

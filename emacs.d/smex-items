@@ -1,13 +1,13 @@
 
 ;; ----- smex-history -----
 (
- org-agenda-month-view
+ package-install
+ load-theme
  org-agenda-list
  org-agenda
  load-file
  counsel-git-grep
  eshell
- shell
 )
 
 ;; ----- smex-data -----
@@ -23,4 +23,6 @@
  (org-agenda . 3)
  (org-agenda-month-view . 3)
  (org-agenda-list . 1)
+ (load-theme . 21)
+ (package-install . 1)
 )

@@ -46,6 +46,8 @@
     smex
     ;; org
     org
+    org-journal
+    org-roam
     ;; language specific packages
     go-mode
     markdown-mode
@@ -219,6 +221,15 @@
 (setq org-tag-alist '(("work" . ?w) ("investigate" . ?i) ("review" . ?r) ("meeting" . ?m) ("backport" . ?b)))
 
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+;; ORGROAM
+
+(setq org-roam-directory "/home/n/o/r")
+(add-hook 'after-init-hook 'org-roam-mode)
+
+;; ORGJOURNAL
+(setq org-journal-dir "/home/n/o/j")
+(setq org-journal-date-format "%A, %d/%m/%Y")
 
 ;; RECENTF
 (recentf-mode 1)

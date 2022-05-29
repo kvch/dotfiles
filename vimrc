@@ -34,6 +34,11 @@ au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>gd <Plug>(go-doc)
 let g:go_fmt_command = "goimports"
 let g:go_fmt_options = "-local=github.com/elastic"
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+
+" Rust
+let g:rustfmt_autosave = 1
 
 set t_Co=256
 
@@ -96,6 +101,14 @@ nmap Gt :GoTest<CR>
 nmap Gli :GoLint<CR>
 nmap Gbu :GoBuild<CR>
 nmap Gd :GoDef<CR>
+
+"Rust stuff
+nmap Rsf i<Right>String::from("")<ESC>hi
+nmap Rp i<Right>println!("")<ESC>hi
+
+
+nmap Ts $i<Right>;
+inoremap Ts <ESC>$i<Right>;
 
 "nmap ;im o\begin{figure}[h]<CR>\begin{minted}[breaklines, breakbytoken, fontsize=\footnotesize, bgcolor=codebg]{c}<CR>%%%<CR>\end{minted}<CR>\end{figure}<ESC>
 "imap <buffer> mn <C-O>/%%%<CR><C-O>c3l

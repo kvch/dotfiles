@@ -215,11 +215,10 @@
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
 (setq ivy-height 30)
+(setq ivy-wrap t)
 (setq ivy-re-builders-alist
-      '((t . ivy--regex-ignore-order)))
-;(setq ivy-re-builders-alist
-;      '((ivy-switch-buffer . ivy--regex-plus)
-;        (t . ivy--regex-fuzzy)))
+      '((ivy-switch-buffer . ivy--regex-plus)
+        (t . ivy--regex-fuzzy)))
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-s") 'counsel-grep-or-swiper)
 (global-set-key (kbd "C-x C-f") 'counsel-projectile-find-file)

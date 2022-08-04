@@ -138,10 +138,12 @@ bindsym Mod4+i exec urxvt -name log -e sudo /usr/bin/grc /home/a/bin/log +ss
 # Mod4+Control+c kills the current client
 bindcode Mod4+Control+53 kill
 
-# Mod4+c starts dmenu and launches the selected application
-# for now, we don’t have a launcher of our own.
+# Mod4+w runs rofi window
+bindcode Mod1+Control+25 exec /usr/bin/rofi -show window
+# Mod4+c runs rofi command
+bindcode Mod1+Control+54 exec /usr/bin/rofi -show run
 bindcode Mod4+54 exec /usr/bin/dmenu_run
-bindcode Mod4+Shift+54 exec i3-input
+bindcode Mod1+Shift+54 exec i3-input
 
 # Mod4+Shift+e exits i3
 bindcode Mod4+Shift+26 exit
@@ -150,9 +152,8 @@ bindcode Mod4+Shift+26 exit
 bindcode Mod4+24 restart
 
 # F9 -> screen lock
-bindcode Mod1+F9 exec i3lock -d
+bindcode Mod1+55 exec i3lock -d -c 000000
 bindsym F8 exec xset dpms force off
-
 
 bindsym Mod4+o exec xbacklight -dec 1
 bindsym Mod4+Shift+o exec xbacklight -inc 1

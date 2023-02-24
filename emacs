@@ -4,6 +4,7 @@
 ;;; dependencies
 (require 'cl-lib)
 (require 'package)
+(require 'package)
 
 ;;; code:
 
@@ -14,7 +15,6 @@
 (defvar required-packages
   '(
     desktop
-    linum-relative
     magit
     ggtags
     paganini-theme
@@ -41,6 +41,7 @@
     ;; org
     org
     org-bullets
+	emojify
     ;; language specific packages
     go-mode
     go-autocomplete
@@ -85,7 +86,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(linum ((t (:background "black" :foreground "green yellow"))))
  '(mouse ((t (:background "light gray"))))
  '(org-document-title ((t (:inherit default :weight bold :foreground "#F8F8F2" :family "Sans Serif" :height 2.0 :underline nil))))
  '(org-level-1 ((t (:inherit default :weight bold :foreground "#F8F8F2" :family "Sans Serif" :height 1.75))))
@@ -107,8 +107,6 @@
 (menu-bar-mode 0)
 (show-paren-mode t)
 (scroll-bar-mode -1)
-(setq linum-relative-backend 'display-line-numbers-mode)
-(linum-relative-global-mode)
 
 (setq inhibit-splash-screen t
       inhibit-startup-echo-area-message t
@@ -141,7 +139,6 @@
 (keyboard-translate ?\C-a ?\C-x)
 
 ;; KEY BINDINGS
-(global-set-key [f8] 'linum-relative-toggle)
 (global-set-key [f9] 'toggle-menu-bar-mode-from-frame)
 
 ;; ELECTRIC-PAIR-MODE
@@ -173,6 +170,7 @@
 ;;; EVIL: VISUAL
 (define-key evil-visual-state-map (kbd "C-n") 'evil-multiedit-next)
 (define-key evil-visual-state-map (kbd "C-p") 'evil-multiedit-prev)
+(define-key evil-visual-state-map "R" 'evil-multiedit-match-all)
 (define-key evil-visual-state-map "R" 'evil-multiedit-match-all)
 
 (define-key evil-multiedit-mode-map (kbd "RET") 'evil-multiedit-toggle-or-restrict-region)
@@ -209,7 +207,9 @@
 (global-semantic-stickyfunc-mode 1)
 
 ;; YASNIPPET
+(require 'yasnippet)
 (yas-global-mode 1)
+(global-set-key (kbd "C-c C-s") 'yas-insert-snippet)
 
 ;; IVY
 (ivy-mode 1)
@@ -234,18 +234,31 @@
 (global-set-key "\C-xa" 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-(setq org-directory "~/d/org")
-(setq org-agenda-files '("~/n/org"))
+(setq org-directory "~/o")
+(setq org-agenda-files '("~/o/a"))
 (setq org-agenda-start-with-follow-mode t)
-(setq org-default-notes-file "~/n/org/notes.org")
+(setq org-default-notes-file "~/o/notes.org")
 (setq org-todo-keywords '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (setq org-capture-templates '(("t" "Todo [inbox]" entry
-                               (file+headline "~/n/org/tasks.org" "Tasks")
-                               "* TODO %i%?")
+                               (file+headline "~/o/inbox.org" "Inbox")
+                               "* %i%?")
                               ("a" "Agenda" entry
-                               (file+headline "~/n/org/agenda.org" "Agenda")
-                               "* TODO %i%? \n %U")))
+                               (file+headline "~/o/a.org" "Agenda")
+                               "* TODO %i%? \n %U")
+                              ("j" "Journal" entry
+                               (file+headline "~/o/j.org" "Journal")
+                               "* %U\n%? \n")))
+
+;; EMOJI
+(use-package emojify
+  :config
+  (when (member "Noto Color Emoji" (font-family-list))
+    (set-fontset-font
+     t 'symbol (font-spec :family "Noto Color Emoji") nil 'prepend))
+  (setq emojify-display-style 'github)
+  (setq emojify-emoji-styles '(github))
+  (bind-key* (kbd "C-c .") #'emojify-insert-emoji))
 
 ;; RECENTF
 (recentf-mode 1)
@@ -253,7 +266,7 @@
 (setq recentf-auto-cleanup 'never)
 
 ;; MAGIT
-(global-set-key (kbd "C-x C-g") 'magit-status)
+;; (global-set-key (kbd "C-x C-g") 'magit-status)
 
 ;; SPEEDBAR
 (global-set-key (kbd "<f3>") 'sr-speedbar-toggle)
@@ -274,13 +287,58 @@
 (setq sr-speedbar-width-console 40)
 
 ;; GO-MODE - GOLANG
+;;;###autoload
+(defun goimports-before-save ()
+  "Add this to .emacs to run gofmt on the current buffer when saving:
+ (add-hook 'before-save-hook 'gofmt-before-save).
+Note that this will cause go-mode to get loaded the first time
+you save any file, kind of defeating the point of autoloading."
+
+  (interactive)
+  (when (eq major-mode 'go-mode) (goimports)))
+
+(defun goimports ()
+  "Formats the current buffer according to the goimports tool."
+
+  (interactive)
+  (let ((tmpfile (make-temp-file "gofmt" nil ".go"))
+        (patchbuf (get-buffer-create "*Gofmt patch*"))
+        (errbuf (get-buffer-create "*Gofmt Errors*"))
+        (coding-system-for-read 'utf-8)
+        (coding-system-for-write 'utf-8))
+
+    (with-current-buffer errbuf
+      (setq buffer-read-only nil)
+      (erase-buffer))
+    (with-current-buffer patchbuf
+      (erase-buffer))
+
+    (write-region nil nil tmpfile)
+
+    ;; We're using errbuf for the mixed stdout and stderr output. This
+    ;; is not an issue because gofmt -w does not produce any stdout
+    ;; output in case of success.
+    (if (zerop (call-process "goimports" nil errbuf nil "-w" tmpfile))
+        (if (zerop (call-process-region (point-min) (point-max) "diff" nil patchbuf nil "-n" "-" tmpfile))
+            (progn
+              (kill-buffer errbuf)
+              (message "Buffer is already gofmted"))
+          (go--apply-rcs-patch patchbuf)
+          (kill-buffer errbuf)
+          (message "Applied gofmt"))
+      (message "Could not apply gofmt. Check errors for details")
+      (gofmt--process-errors (buffer-file-name) tmpfile errbuf))
+
+    (kill-buffer patchbuf)
+    (delete-file tmpfile)))
+
+(provide 'go-imports)
+
 (add-hook 'before-save-hook 'gofmt-before-save)
 (add-hook 'completion-at-point-functions 'go-complete-at-point)
 (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
 (add-hook 'go-mode-hook
                     (lambda () (local-set-key (kbd "C-0") #'run-latexmk)))
-; jump to definition
-;(local-set-key (kbd "C-x j") 'godef-jump)
 (defun my-go-electric-brace ()
   "Insert an opening brace may be with the closing one.
 If there is a space before the brace also adds new line with
@@ -300,27 +358,6 @@ inserted between the braces between the braces."
   "Display godoc for given package (with completion)."
   (interactive)
   (godoc (ivy-read "Package: " (go-packages) :require-match t)))
-
-;(use-package go-guru
-;  :after go-mode)
-;
-;(use-package go-mode
-;  :init
-;  ;(setq go-fontify-function-calls nil)  ; fontifing names of called
-;  ;                                      ; functions is too much for me
-;  :bind
-;  (:map go-mode-map
-;        ("C-x C-d" . godoc)
-;        ("C-x C-p" . my-godoc-package)
-;        ("{" . my-go-electric-brace)))
-;
-(eval-after-load 'go-mode
-  '(progn
-     (local-set-key (kbd "C-x j") 'godef-jump)
-     (local-set-key (kbd "C-x d") 'my-godoc-package)
-     (local-set-key (kbd "{") 'my-go-electric-brace)
-   )
-)
 
 (eval-after-load 'speedbar
   '(speedbar-add-supported-extension ".go"))
@@ -355,6 +392,6 @@ inserted between the braces between the braces."
  ;; If there is more than one, they won't work right.
  '(ispell-dictionary nil)
  '(package-selected-packages
-   '(go-complete cargo-mode paganini-theme org-bullets poet-theme undo-tree web-mode go-guru auto-yasnippet mmm-mode jedi yasnippet yaml-mode sr-speedbar spaceline smooth-scrolling smex molokai-theme markdown-mode linum-relative less-css-mode go-mode evil-surround evil-org evil-multiedit evil-magit evil-leader counsel-projectile company-php company-jedi)))
+   '(yasnippet-snippets go-complete cargo-mode paganini-theme org-bullets poet-theme undo-tree web-mode go-guru auto-yasnippet mmm-mode jedi yasnippet yaml-mode sr-speedbar spaceline smooth-scrolling smex molokai-theme markdown-mode less-css-mode go-mode evil-surround evil-org evil-multiedit evil-magit evil-leader counsel-projectile company-php company-jedi)))
 
 

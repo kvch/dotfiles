@@ -28,3 +28,4 @@ env/
 messages.pot
 npm-debug.log
 geckodriver.log
+*.~undo-tree~

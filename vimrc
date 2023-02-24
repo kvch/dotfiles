@@ -7,19 +7,6 @@ execute pathogen#infect('bundle/{}')
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:ctrlp_working_path_mode = 'r'
 
-" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-
-let g:syntastic_mode_map = {
-    \ "mode" : "passive" }
-
 " Tagbar
 let g:tagbar_width = 50
 let g:tagbar_autofocus = 1
@@ -101,6 +88,9 @@ nmap Gt :GoTest<CR>
 nmap Gli :GoLint<CR>
 nmap Gbu :GoBuild<CR>
 nmap Gd :GoDef<CR>
+
+nmap ~~ <Home>i~~<ESC>A~~<ESC>
+nmap ~x :s/- \[ \]/- \[x\]/<CR>
 
 "Rust stuff
 nmap Rsf i<Right>String::from("")<ESC>hi

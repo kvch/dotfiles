@@ -9,7 +9,81 @@ function add_remote() {
 
 function update_master() {
     git stash
-    git checkout master
+    git checkout main
     git fetch upstream
-    git reset --hard upstream/master
+    git reset --hard upstream/main
+}
+
+function load_env() {
+    export $(cat $XATA_HOME/.env | xargs)
+}
+
+function xb_post() {
+    curl -X POST http://localhost:6001$1 \
+        -d $2 \
+        -H "Authorization: Bearer ${XATA_API_KEY}" \
+        -H 'Accept: application/json' \
+        -H 'Content-Type: application/json' \
+        --silent | jq
+}
+
+function xb_put() {
+    curl -X PUT http://localhost:6001$1 \
+        -d $2 \
+        -H "Authorization: Bearer ${XATA_API_KEY}" \
+        -H 'Accept: application/json' \
+        -H 'Content-Type: application/json' \
+        --silent | jq
+}
+
+function xb_ws_put() {
+    curl -X PUT http://$1.localhost:6001$2 \
+        -d $3 \
+        -H "Authorization: Bearer ${XATA_API_KEY}" \
+        -H 'Accept: application/json' \
+        -H 'Content-Type: application/json' \
+        --silent | jq
+}
+
+function xb_ws_post() {
+    curl -X POST http://$1.localhost:6001$2 \
+        -d $3 \
+        -H "Authorization: Bearer ${XATA_API_KEY}" \
+        -H 'Accept: application/json' \
+        -H 'Content-Type: application/json' \
+        --silent | jq
+}
+
+function xb_ws_patch() {
+    curl -X PATCH http://$1.localhost:6001$2 \
+        -d $3 \
+        -H "Authorization: Bearer ${XATA_API_KEY}" \
+        -H 'Accept: application/json' \
+        -H 'Content-Type: application/json' \
+        --silent | jq
+}
+
+function xb_ws_delete() {
+    curl -X DELETE http://$1.localhost:6001$2 \
+        -d $3 \
+        -H "Authorization: Bearer ${XATA_API_KEY}" \
+        -H 'Accept: application/json' \
+        -H 'Content-Type: application/json' \
+        --silent | jq
+}
+
+function xb_get() {
+    curl -X GET http://localhost:6001$1 \
+        -H "Authorization: Bearer ${XATA_API_KEY}" \
+        -H 'Accept: application/json' \
+        -H 'Content-Type: application/json' \
+        --silent | jq
+}
+
+function xb_ws_get() {
+    curl -X GET http://$1.localhost:6001$2 \
+        -H "Authorization: Bearer ${XATA_API_KEY}" \
+        -H 'Accept: application/json' \
+        -H 'Content-Type: application/json' \
+        --silent | jq
 }

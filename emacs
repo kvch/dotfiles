@@ -238,7 +238,7 @@
 (setq org-agenda-files '("~/o/a"))
 (setq org-agenda-start-with-follow-mode t)
 (setq org-default-notes-file "~/o/notes.org")
-(setq org-todo-keywords '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
+(setq org-todo-keywords '((sequence "TODO(t)" "WAIT(w@/!)" "IN REVIEW(r)" "UPDATE" "|" "DONE(d!)" "CANCELED(c@)" "CLOSED(c)" "MERGED(m)"))
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (setq org-capture-templates '(("t" "Todo [inbox]" entry
                                (file+headline "~/o/inbox.org" "Inbox")

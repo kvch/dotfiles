@@ -102,7 +102,7 @@
 
 
 (setq-default show-trailing-whitespace t)
-(set-face-attribute 'default nil :height 90)
+(set-face-attribute 'default nil :height 160)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (tool-bar-mode 0)
 (menu-bar-mode 0)
@@ -406,5 +406,4 @@ inserted between the braces between the braces."
  '(ispell-dictionary nil)
  '(package-selected-packages
    '(yasnippet-snippets go-complete cargo-mode paganini-theme org-bullets poet-theme undo-tree web-mode go-guru auto-yasnippet mmm-mode jedi yasnippet yaml-mode sr-speedbar spaceline smooth-scrolling smex molokai-theme markdown-mode less-css-mode go-mode evil-surround evil-org evil-multiedit evil-magit evil-leader counsel-projectile company-php company-jedi)))
-
 

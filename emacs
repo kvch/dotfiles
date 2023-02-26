@@ -4,7 +4,7 @@
 ;;; dependencies
 (require 'cl-lib)
 (require 'package)
-(require 'package)
+(require 'use-package)
 
 ;;; code:
 
@@ -41,6 +41,7 @@
     ;; org
     org
     org-bullets
+    org-roam
 	emojify
     ;; language specific packages
     go-mode
@@ -238,7 +239,9 @@
 (setq org-agenda-files '("~/o/a"))
 (setq org-agenda-start-with-follow-mode t)
 (setq org-default-notes-file "~/o/notes.org")
-(setq org-todo-keywords '((sequence "TODO(t)" "WAIT(w@/!)" "IN REVIEW(r)" "UPDATE" "|" "DONE(d!)" "CANCELED(c@)" "CLOSED(c)" "MERGED(m)"))
+(setq org-todo-keywords
+    '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")
+      (sequence "DRAFT" "IN REVIEW(r!)" "NEEDS UPDATE(u@/!)" "|" "MERGED(m!)" "CLOSED(f@/!)")))
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (setq org-capture-templates '(("t" "Todo [inbox]" entry
                                (file+headline "~/o/inbox.org" "Inbox")
@@ -249,6 +252,16 @@
                               ("j" "Journal" entry
                                (file+headline "~/o/j.org" "Journal")
                                "* %U\n%? \n")))
+
+;; ROAM
+(setq org-roam-directory (file-truename "~/r"))
+(org-roam-db-autosync-mode)
+(use-package org-roam
+ :bind (("C-c n l" . org-roam-buffer-toggle)
+        ("C-c n f" . org-roam-node-find)
+        ("C-c n i" . org-roam-node-insert)
+ )
+)
 
 ;; EMOJI
 (use-package emojify

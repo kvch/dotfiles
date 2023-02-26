@@ -254,13 +254,27 @@
                                "* %U\n%? \n")))
 
 ;; ROAM
+(defun org-roam-node-insert-immediate (arg &rest args)
+  (interactive "P")
+  (let ((args (cons arg args))
+        (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                  '(:immediate-finish t)))))
+    (apply #'org-roam-node-insert args)))
 (setq org-roam-directory (file-truename "~/r"))
-(org-roam-db-autosync-mode)
 (use-package org-roam
  :bind (("C-c n l" . org-roam-buffer-toggle)
         ("C-c n f" . org-roam-node-find)
         ("C-c n i" . org-roam-node-insert)
+        ("C-c n I" . org-roam-node-insert-immediate)
+		:map org-roam-dailies-map
+        ("Y" . org-roam-dailies-capture-yesterday)
+        ("T" . org-roam-dailies-capture-tomorrow)
  )
+ :bind-keymap
+ ("C-c n d" . org-roam-dailies-map)
+ :config
+ (require 'org-roam-dailies)
+(org-roam-db-autosync-mode)
 )
 
 ;; EMOJI

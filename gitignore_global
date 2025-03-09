@@ -13,6 +13,7 @@
 .coarc
 .coverage
 .doctrees/
+.stash/
 .todo
 baba
 build/
@@ -29,3 +30,5 @@ messages.pot
 npm-debug.log
 geckodriver.log
 *.~undo-tree~
+cover.html
+cover.out

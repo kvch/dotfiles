@@ -7,83 +7,44 @@ function add_remote() {
     git fetch $2
 }
 
-function update_master() {
+function update_main() {
     git stash
     git checkout main
     git fetch upstream
     git reset --hard upstream/main
 }
 
-function load_env() {
-    export $(cat $XATA_HOME/.env | xargs)
+function stash_init() {
+    mkdir $(git rev-parse --show-toplevel)/.stash
 }
 
-function xb_post() {
-    curl -X POST http://localhost:6001$1 \
-        -d $2 \
-        -H "Authorization: Bearer ${XATA_API_KEY}" \
-        -H 'Accept: application/json' \
-        -H 'Content-Type: application/json' \
-        --silent | jq
+function stash_note() {
+    note=$(git rev-parse --show-toplevel)/.stash/$(git rev-parse --abbrev-ref HEAD)
+    touch $note
+    read "?Github issue: " issue
+    if [ ! -z "$issue" ] && echo "issue $issue" >> $note
+    read "?Goal: " goal
+    if [ ! -z "$goal" ] && echo $goal >> $note
+    git commit --amend
 }
 
-function xb_put() {
-    curl -X PUT http://localhost:6001$1 \
-        -d $2 \
-        -H "Authorization: Bearer ${XATA_API_KEY}" \
-        -H 'Accept: application/json' \
-        -H 'Content-Type: application/json' \
-        --silent | jq
+function stash_update() {
+    note=$(git rev-parse --show-toplevel)/.stash/$(git rev-parse --abbrev-ref HEAD)
+    read "?Updates: " update
+    if [ ! -z "$update" ] && echo $update >> $note
 }
 
-function xb_ws_put() {
-    curl -X PUT http://$1.localhost:6001$2 \
-        -d $3 \
-        -H "Authorization: Bearer ${XATA_API_KEY}" \
-        -H 'Accept: application/json' \
-        -H 'Content-Type: application/json' \
-        --silent | jq
+function stash_ls() {
+    ls $(git rev-parse --show-toplevel)/.stash
 }
 
-function xb_ws_post() {
-    curl -X POST http://$1.localhost:6001$2 \
-        -d $3 \
-        -H "Authorization: Bearer ${XATA_API_KEY}" \
-        -H 'Accept: application/json' \
-        -H 'Content-Type: application/json' \
-        --silent | jq
+function stash_complete() {
+    rm $(git rev-parse --show-toplevel)/.stash/$(git rev-parse --abbrev-ref HEAD)
 }
 
-function xb_ws_patch() {
-    curl -X PATCH http://$1.localhost:6001$2 \
-        -d $3 \
-        -H "Authorization: Bearer ${XATA_API_KEY}" \
-        -H 'Accept: application/json' \
-        -H 'Content-Type: application/json' \
-        --silent | jq
-}
+function stash_show() {
+    cat $(git rev-parse --show-toplevel)/.stash/$(git rev-parse --abbrev-ref HEAD)
+    git --no-pager log --pretty=format:%s -n 1 $1
+    echo ""
 
-function xb_ws_delete() {
-    curl -X DELETE http://$1.localhost:6001$2 \
-        -d $3 \
-        -H "Authorization: Bearer ${XATA_API_KEY}" \
-        -H 'Accept: application/json' \
-        -H 'Content-Type: application/json' \
-        --silent | jq
-}
-
-function xb_get() {
-    curl -X GET http://localhost:6001$1 \
-        -H "Authorization: Bearer ${XATA_API_KEY}" \
-        -H 'Accept: application/json' \
-        -H 'Content-Type: application/json' \
-        --silent | jq
-}
-
-function xb_ws_get() {
-    curl -X GET http://$1.localhost:6001$2 \
-        -H "Authorization: Bearer ${XATA_API_KEY}" \
-        -H 'Accept: application/json' \
-        -H 'Content-Type: application/json' \
-        --silent | jq
 }

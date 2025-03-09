@@ -1,6 +1,9 @@
 ;;; .emacs --- config
 ;;; commentary:
 
+(add-to-list 'load-path "/home/n/p/copilot.el")
+(require 'copilot)
+
 ;;; dependencies
 (require 'cl-lib)
 (require 'package)
@@ -14,6 +17,9 @@
 
 (defvar required-packages
   '(
+    dash
+    s
+    editorconfig
     desktop
     magit
     ggtags
@@ -47,6 +53,9 @@
     go-mode
     go-autocomplete
     go-guru
+    flymake
+    flymake-proc
+    flymake-go
     rust-mode
     tree-sitter
     markdown-mode
@@ -54,6 +63,7 @@
     php-mode
     yaml-mode
     web-mode
+    terraform-mode
    )
 )
 
@@ -193,11 +203,6 @@
 ;
 ;(add-hook 'python-mode-hook 'my/python-mode-hook)
 
-;; FLYCHECK
-;(global-flycheck-mode)
-;(setq flycheck-check-syntax-automatically '(mode-enabled save))
-;(setq flycheck-highlighting-mode 'lines)
-
 ;; SPACELINE
 (require 'spaceline-config)
 (spaceline-spacemacs-theme)
@@ -313,6 +318,8 @@
 (setq sr-speedbar-max-width 70)
 (setq sr-speedbar-width-console 40)
 
+(add-to-list 'auto-mode-alist (cons "\\.mdx\\'" 'markdown-mode))
+
 ;; GO-MODE - GOLANG
 ;;;###autoload
 (defun goimports-before-save ()
@@ -361,7 +368,7 @@ you save any file, kind of defeating the point of autoloading."
 
 (provide 'go-imports)
 
-(add-hook 'before-save-hook 'gofmt-before-save)
+(add-hook 'before-save-hook 'goimports-before-save)
 (add-hook 'completion-at-point-functions 'go-complete-at-point)
 (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
 (add-hook 'go-mode-hook
@@ -386,8 +393,30 @@ inserted between the braces between the braces."
   (interactive)
   (godoc (ivy-read "Package: " (go-packages) :require-match t)))
 
+(add-to-list 'load-path "/home/n/go/src/github.com/dougm/goflymake")
+(require 'go-flymake)
+
+(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+
 (eval-after-load 'speedbar
   '(speedbar-add-supported-extension ".go"))
+
+(defun pgroll-generate ()
+  "Generate files for pgroll"
+  (interactive)
+  (progn (let ((default-directory "/home/n/go/src/github.com/xataio/pgroll/"))(shell-command "make generate"))))
+
+(defun pgroll-lint ()
+  "Generate files for pgroll"
+  (interactive)
+  (progn (let ((default-directory "/home/n/go/src/github.com/xataio/pgroll/"))(shell-command "make lint"))))
+
+;; COPILOT
+(add-hook 'prog-mode-hook 'copilot-mode)
+(with-eval-after-load 'copilot
+  (evil-define-key 'insert copilot-mode-map
+    (kbd "TAB") 'copilot-accept-completion))
 
 ;; PYTHON-MODE
 ;(define-key global-map (kbd "RET") 'newline-and-indent)
@@ -411,6 +440,10 @@ inserted between the braces between the braces."
   '(lambda ()
      (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
+;; Command aliases
+(defalias 'magit-push-current-to-pushremove 'gpush)
+(defalias 'magit-stage 'gstage)
+
 (provide '.emacs)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -419,6 +452,12 @@ inserted between the braces between the braces."
  ;; If there is more than one, they won't work right.
  '(ispell-dictionary nil)
  '(package-selected-packages
-   '(yasnippet-snippets go-complete cargo-mode paganini-theme org-bullets poet-theme undo-tree web-mode go-guru auto-yasnippet mmm-mode jedi yasnippet yaml-mode sr-speedbar spaceline smooth-scrolling smex molokai-theme markdown-mode less-css-mode go-mode evil-surround evil-org evil-multiedit evil-magit evil-leader counsel-projectile company-php company-jedi)))
+   '(0xc auto-yasnippet cargo-mode company-jedi company-php
+         counsel-projectile evil-leader evil-magit evil-multiedit
+         evil-org evil-surround go-complete go-guru go-mode jedi
+         less-css-mode markdown-mode mmm-mode molokai-theme
+         org-bullets paganini-theme poet-theme smex smooth-scrolling
+         spaceline sr-speedbar undo-tree web-mode yaml-mode yasnippet
+         yasnippet-snippets)))
 
 

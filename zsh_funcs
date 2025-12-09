@@ -1,5 +1,10 @@
 function list_lost() {
     git reflog |  awk '{ print $1 }' | xargs gitk
+
+function clean_stack() {
+    cd $XATA_HOME/dev/docker
+    docker stop $(docker ps -a -q)
+    docker compose rm
 }
 
 function add_remote() {
@@ -12,6 +17,10 @@ function update_main() {
     git checkout main
     git fetch upstream
     git reset --hard upstream/main
+}
+
+function rb() {
+    git rebase upstream/main
 }
 
 function stash_init() {
@@ -47,4 +56,14 @@ function stash_show() {
     git --no-pager log --pretty=format:%s -n 1 $1
     echo ""
 
+}
+
+# Checkout branches interactively
+function cob() {
+    git checkout $(git branch --sort=-committerdate | fzf)
+}
+
+# Delete branches interactively
+function delb() {
+    git branch | fzf --multi | xargs git branch -d
 }

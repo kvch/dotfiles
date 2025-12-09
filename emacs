@@ -1,13 +1,28 @@
 ;;; .emacs --- config
 ;;; commentary:
 
-(add-to-list 'load-path "/home/n/p/copilot.el")
-(require 'copilot)
 
 ;;; dependencies
 (require 'cl-lib)
 (require 'package)
 (require 'use-package)
+
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
 
 ;;; code:
 
@@ -19,7 +34,9 @@
   '(
     dash
     s
+    f
     editorconfig
+    cov
     desktop
     magit
     ggtags
@@ -47,8 +64,10 @@
     ;; org
     org
     org-bullets
-    org-roam
 	emojify
+    ;; lsp
+    lsp-mode
+    lsp-ui
     ;; language specific packages
     go-mode
     go-autocomplete
@@ -58,14 +77,22 @@
     flymake-go
     rust-mode
     tree-sitter
+    tree-sitter-langs
+    treesit-fold
     markdown-mode
     less-css-mode
     php-mode
     yaml-mode
     web-mode
     terraform-mode
+    ;; treemacs
+    treemacs
+    treemacs-evil
    )
 )
+
+(straight-use-package '(flymake-stylelint :type git :host github :repo "orzechowskid/flymake-stylelint" :branch "master"))
+(straight-use-package 'gptel)
 
 ;; define package installer
 (defun install-packages ()
@@ -85,6 +112,14 @@
 ;; load required packages
 (cl-loop for p in required-packages
   do (require p))
+
+
+(add-to-list 'load-path "/home/n/p/copilot.el")
+(require 'copilot)
+
+;;(straight-use-package '(tsx-mode :type git :host github :repo "orzechowskid/tsx-mode.el" :branch "emacs30"))
+;;(require 'tsx-mode)
+;;(add-to-list 'auto-mode-alist '("\\.[jt]s[x]?\\'" . tsx-mode)
 
 ;; UI
 (load-theme 'paganini t)
@@ -148,6 +183,8 @@
 (setq auto-save-default nil)
 ;; remap c-x to c-a too
 (keyboard-translate ?\C-a ?\C-x)
+
+(straight-use-package '(tsi :type git :host github :repo "orzechowskid/tsi.el"))
 
 ;; KEY BINDINGS
 (global-set-key [f9] 'toggle-menu-bar-mode-from-frame)
@@ -235,6 +272,7 @@
 (define-key ivy-minibuffer-map (kbd "C-k") #'ivy-previous-line-or-history)
 
 
+(setq copilot-chat-frontend 'org)
 
 ;; ORG
 (global-set-key "\C-xa" 'org-agenda)
@@ -257,30 +295,6 @@
                               ("j" "Journal" entry
                                (file+headline "~/o/j.org" "Journal")
                                "* %U\n%? \n")))
-
-;; ROAM
-(defun org-roam-node-insert-immediate (arg &rest args)
-  (interactive "P")
-  (let ((args (cons arg args))
-        (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-                                                  '(:immediate-finish t)))))
-    (apply #'org-roam-node-insert args)))
-(setq org-roam-directory (file-truename "~/r"))
-(use-package org-roam
- :bind (("C-c n l" . org-roam-buffer-toggle)
-        ("C-c n f" . org-roam-node-find)
-        ("C-c n i" . org-roam-node-insert)
-        ("C-c n I" . org-roam-node-insert-immediate)
-		:map org-roam-dailies-map
-        ("Y" . org-roam-dailies-capture-yesterday)
-        ("T" . org-roam-dailies-capture-tomorrow)
- )
- :bind-keymap
- ("C-c n d" . org-roam-dailies-map)
- :config
- (require 'org-roam-dailies)
-(org-roam-db-autosync-mode)
-)
 
 ;; EMOJI
 (use-package emojify
@@ -402,6 +416,26 @@ inserted between the braces between the braces."
 (eval-after-load 'speedbar
   '(speedbar-add-supported-extension ".go"))
 
+(add-hook 'go-mode-hook #'lsp-deferred)
+(with-eval-after-load 'lsp-mode
+  (setq lsp-prefer-flymake nil) ;; use lsp-ui + flycheck instead of flymake
+  (setq lsp-enable-symbol-highlighting nil)
+  (setq lsp-headerline-breadcrumb-enable nil)
+  (add-hook 'lsp-mode-hook #'lsp-ui-mode))
+(with-eval-after-load 'lsp-ui
+  (setq lsp-ui-sideline-enable nil)      ;; show diagnostics and code actions in sideline
+  (setq lsp-ui-sideline-show-hover t)    ;; show function signatures
+  (setq lsp-ui-doc-enable t)             ;; show documentation popups
+  (setq lsp-ui-doc-show-with-cursor t)
+  (setq lsp-ui-doc-show-with-mouse nil)
+  (setq lsp-ui-doc-delay 5.0))
+
+;; on-demand docs
+(define-key lsp-mode-map (kbd "K") 'lsp-ui-doc-show)
+
+(setq lsp-ui-doc-position 'at-point)
+(setq lsp-gopls-staticcheck nil)
+
 (defun pgroll-generate ()
   "Generate files for pgroll"
   (interactive)
@@ -416,7 +450,7 @@ inserted between the braces between the braces."
 (add-hook 'prog-mode-hook 'copilot-mode)
 (with-eval-after-load 'copilot
   (evil-define-key 'insert copilot-mode-map
-    (kbd "TAB") 'copilot-accept-completion))
+    (kbd "C-c C-c") 'copilot-accept-completion))
 
 ;; PYTHON-MODE
 ;(define-key global-map (kbd "RET") 'newline-and-indent)
@@ -457,7 +491,7 @@ inserted between the braces between the braces."
          evil-org evil-surround go-complete go-guru go-mode jedi
          less-css-mode markdown-mode mmm-mode molokai-theme
          org-bullets paganini-theme poet-theme smex smooth-scrolling
-         spaceline sr-speedbar undo-tree web-mode yaml-mode yasnippet
-         yasnippet-snippets)))
+         spaceline sr-speedbar tide typescript-mode undo-tree web-mode
+         yaml-mode yasnippet yasnippet-snippets)))
 
 

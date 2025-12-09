@@ -11,6 +11,7 @@
 *synctex.gz
 .buildinfo
 .coarc
+.claude
 .coverage
 .doctrees/
 .stash/
@@ -32,3 +33,6 @@ geckodriver.log
 *.~undo-tree~
 cover.html
 cover.out
+*.test
+flymake_*.*
+bmad

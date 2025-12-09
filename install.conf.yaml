@@ -1,25 +1,70 @@
-- clean: ['~']
+config:
+  create: true
+  workdir: ~/.config/dotdrop
+  dotpath: .
 
-- link:
-    ~/.tmux.conf: tmux.conf
-    ~/.vimrc: vimrc
-    ~/.emacs: emacs
-    ~/.vim: vim
-    ~/.zshrc: zshrc
-    ~/.oh-my-zsh: oh-my-zsh
-    ~/.pentadactylrc: pentadactylrc
-    ~/.config/i3: i3/
-    ~/.config/i3status: i3status/
-    ~/.Xdefaults: Xdefaults
-    ~/.xinitrc: xinitrc
-    ~/.conkyrc: conkyrc
-    ~/.gitconfig: gitconfig
-    ~/.gitignore_global: gitignore_global
-    ~/.rtorrent.rc: rtorrent.rc
-    ~/.xmodmap: xmodmap
-    ~/.zsh_funcs: zsh_funcs
-    ~/.config/pycodestyle: pycodestyle
+dotfiles:
+  tmux_conf:
+    src: tmux.conf
+    dst: ~/.tmux.conf
+  vimrc:
+    src: vimrc
+    dst: ~/.vimrc
+  emacs:
+    src: emacs
+    dst: ~/.emacs
+  vim:
+    dst: ~/.vim
+    src: vim
+  zshrc:
+    dst: ~/.zshrc
+    src: zshrc
+  oh_my_zsh:
+    dst: ~/.oh-my-zsh
+    src: oh-my-zsh
+  i3_config:
+    dst: ~/.config/i3
+    src: i3/
+  i3status_config:
+    dst: ~/.config/i3status
+    src: i3status
+  xdefaults:
+    dst: ~/.Xdefaults
+    src: Xdefaults
+  xinitrc:
+    dst: ~/.xinitrc
+    src: xinitrc
+  conkyrc:
+    dst: ~/.conkyrc
+    src: conkyrc
+  gitconfig:
+    dst: ~/.gitconfig
+    src: gitconfig
+  gitignore_global:
+    dst: ~/.gitignore_global
+    src: gitignore_global
+  xmodmap:
+    dst: ~/.xmodmap
+    src: xmodmap
+  zsh_funcs:
+    dst: ~/.zsh_funcs
+    src: zsh_funcs
 
-- shell:
-    - [mkdir -p ~/.config ~/.i3, Setting up directories]
-    - [git submodule update --init --recursive, Installing/updating submodules]
+profiles:
+  tyr:
+    dotfiles:
+      - conkyrc
+      - emacs
+      - gitconfig
+      - gitignore_global
+      - i3_config
+      - i3status_config
+      - oh_my_zsh
+      - tmux_conf
+      - vim
+      - vimrc
+      - xdefaults
+      - xinitrc
+      - xmodmap
+      - zsh_funcs
+      - zshrc
